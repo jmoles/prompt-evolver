@@ -1,0 +1,99 @@
+# Fitness evaluation configuration.
+# All patterns, keywords, and rubrics are domain-specific — customize per use case.
+# This is the default/example config for a generic agent.
+
+weights:
+  specificity: 1.0
+  structure: 1.0
+  calibration: 1.0
+  disposition: 0.5
+  actionability: 0.8
+  guideline_compliance: 0.6
+
+# Hard floors: candidates below these thresholds are rejected before validation
+deterministic_floors:
+  structure: 0.6
+  specificity: 0.3
+
+# Regex patterns indicating specificity (concrete language, not vague).
+# Grouped by segment key. Python regex syntax.
+specificity_patterns:
+  role_statement:
+    - "\\b(senior|lead|principal|expert|specialist)\\b"
+    - "\\b(owns?|drives?|responsible for)\\b"
+  expertise_areas:
+    - "\\b[A-Z][A-Za-z]+(?:\\s+[A-Z][A-Za-z]+){0,3}\\b"
+    - "\\b\\d+[+-]?\\s*(years?|months?)\\b"
+  context_block:
+    - "\\b(currently|as of|near-term|Q[1-4]\\s*\\d{4})\\b"
+    - "\\$[\\d,.]+[KMB]?"
+  response_style:
+    - "\\b(always|never|first|before|after|when)\\b"
+  guardrails:
+    - "\\b(never|refuse|reject|push back|escalate|flag)\\b"
+
+# Keywords indicating domain calibration
+calibration_keywords:
+  disposition:
+    - "decision"
+    - "judgment"
+    - "tradeoff"
+  expertise_areas:
+    - "experience"
+    - "deep"
+    - "professional"
+  response_style:
+    - "lead with"
+    - "recommend"
+    - "specific"
+    - "concrete"
+
+# Phrases that indicate vagueness — penalized in specificity scoring
+vague_phrases:
+  - "it depends"
+  - "various factors"
+  - "consider the implications"
+  - "as appropriate"
+  - "best practices suggest"
+  - "it's important to note"
+  - "there are many"
+  - "a number of"
+  - "in general"
+
+# LLM evaluation rubrics (generic, domain-agnostic)
+llm_prompts:
+  disposition_rubric: |
+    You are evaluating an AI agent prompt's disposition section against a scenario.
+    Rate how well the stated disposition would guide effective behavior.
+
+    DISPOSITION:
+    {disposition}
+
+    SCENARIO:
+    {scenario}
+
+    Score 1-5:
+    1 = disposition is irrelevant or counterproductive
+    2 = mostly misaligned
+    3 = acceptable but generic
+    4 = well-aligned
+    5 = precisely calibrated for this scenario type
+
+    Respond with ONLY a single number 1-5.
+
+  actionability_rubric: |
+    You are evaluating an AI agent prompt for actionability.
+    Consider the full prompt below and the scenario it would be applied to.
+
+    PROMPT:
+    {prompt}
+
+    SCENARIO:
+    {scenario}
+
+    Count the number of concrete, actionable instructions in the prompt.
+    A concrete instruction tells the agent specifically what to do (e.g., "lead with
+    the recommendation" or "always name the specific contract vehicle").
+    Generic advice ("be helpful", "consider the context") does NOT count.
+
+    How many concrete, actionable instructions? Respond with ONLY a number.

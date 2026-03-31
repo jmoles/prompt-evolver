@@ -1,0 +1,39 @@
+# Evolution hyperparameters and runtime configuration.
+
+population:
+  size: 16
+  seed_profile: ""  # path to the .md profile to evolve
+
+generations: 28
+
+operators:
+  mutation:
+    de_diff_weight: 0.60
+    guideline_inject_weight: 0.25
+    prune_weight: 0.15
+  crossover:
+    probability: 0.3
+
+scenarios:
+  path: ""  # path to scenarios.json
+  rotation: "round_robin"  # "round_robin" or "random"
+
+guidelines:
+  path: ""  # path to guidelines.json (created if missing)
+  min_confidence: 0.3
+  consolidate_every: 5
+
+llm:
+  model: "ollama/mistral:7b-instruct-v0.3-q5_K_M"
+  temperature: 0.7
+  max_tokens: 1024
+  timeout: 120
+
+validation:
+  mode: "local"  # "local" | "claude" | "both"
+  claude_model: "anthropic/claude-sonnet-4-20250514"
+  pairwise_rounds: 3
+
+output:
+  dir: "output"
+  save_every_gen: true

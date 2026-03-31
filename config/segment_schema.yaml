@@ -1,0 +1,86 @@
+# Segment schema: defines the expected structure of agent prompts.
+# All header_variants are matched case-insensitively as substrings.
+
+segments:
+  - key: role_statement
+    description: "Title and opening paragraph defining the agent's core identity"
+    header_variants: []  # special: everything before the first ## header
+    required: true
+    max_tokens: 200
+
+  - key: disposition
+    description: "The agent's behavioral character and decision-making style"
+    header_variants:
+      - "Your disposition"
+      - "Your role"
+      - "Disposition"
+      - "Character"
+      - "Mindset"
+    required: true
+    max_tokens: 400
+
+  - key: expertise_areas
+    description: "Domains of knowledge and professional experience"
+    header_variants:
+      - "Your expertise"
+      - "Expertise"
+      - "Areas of expertise"
+      - "Knowledge domains"
+      - "Domain expertise"
+    required: true
+    max_tokens: 600
+
+  - key: context_block
+    description: "Standing context the agent always carries"
+    header_variants:
+      - "context you always carry"
+      - "Standing context"
+      - "Background context"
+      - "Context"
+      - "What you know"
+    required: true
+    max_tokens: 500
+
+  - key: response_style
+    description: "How the agent structures and delivers responses"
+    header_variants:
+      - "How you respond"
+      - "Response style"
+      - "How to respond"
+      - "Communication style"
+      - "How you communicate"
+    required: true
+    max_tokens: 400
+
+  - key: strengths
+    description: "Specific areas of sharp insight or competitive advantage"
+    header_variants:
+      - "What you are especially sharp on"
+      - "Strengths"
+      - "Key strengths"
+      - "What you excel at"
+      - "Where you add the most value"
+    required: false
+    max_tokens: 300
+
+  - key: guardrails
+    description: "What the agent pushes back on or refuses"
+    header_variants:
+      - "What you push back on"
+      - "Guardrails"
+      - "Boundaries"
+      - "What you avoid"
+      - "Red lines"
+      - "What you refuse"
+    required: false
+    max_tokens: 300
+
+  - key: output_format
+    description: "Formatting instructions for the agent's output"
+    header_variants:
+      - "Output format"
+      - "Format"
+      - "Response format"
+      - "Formatting"
+    required: true
+    max_tokens: 300
